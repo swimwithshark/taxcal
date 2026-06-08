@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaysia Personal Tax Calculator (YA 2025/2026)</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <!-- Header / Navigation -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600 text-white p-2 rounded-lg">
+                    <i class="fa-solid fa-calculator text-xl"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-lg block tracking-tight">TaxCalc.my</span>
+                    <span class="text-xs text-gray-500 block -mt-1">Malaysia Personal Tax Engine</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <label for="assessmentYear" class="text-sm font-medium text-gray-600">Year of Assessment:</label>
+                <select id="assessmentYear" class="bg-gray-100 border border-gray-300 rounded-md py-1 px-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="2026">YA 2026 (Budget 2026)</option>
+                    <option value="2025">YA 2025 (Current Filing)</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            
+            <!-- Left & Center Columns: Wizard Steps Form -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Wizard Progress Indicator Bar -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex items-center justify-between relative">
+                        <!-- Progress Line Backbone -->
+                        <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-1 bg-gray-200 z-0"></div>
+                        <div id="progressBarFill" class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-blue-600 z-0 transition-all duration-300" style="width: 0%;"></div>
+
+                        <!-- Step 1 Indicator -->
+                        <div class="z-10 flex flex-col items-center bg-white px-2">
+                            <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold ring-4 ring-blue-100 transition-colors duration-300">1</div>
+                            <span class="text-xs font-semibold mt-2 text-blue-600">Income Details</span>
+                        </div>
+                        <!-- Step 2 Indicator -->
+                        <div class="z-10 flex flex-col items-center bg-white px-2">
+                            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold transition-colors duration-300">2</div>
+                            <span class="text-xs font-medium mt-2 text-gray-500">Tax Reliefs</span>
+                        </div>
+                        <!-- Step 3 Indicator -->
+                        <div class="z-10 flex flex-col items-center bg-white px-2">
+                            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold transition-colors duration-300">3</div>
+                            <span class="text-xs font-medium mt-2 text-gray-500">Rebates & Final</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Interface Block -->
+                <form id="taxWizardForm" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    
+                    <!-- STEP 1: INCOME DETAILS -->
+                    <div id="step1" class="p-6 space-y-6">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900">Step 1: Gross Annual Income</h2>
+                            <p class="text-sm text-gray-500 mt-1">Declare your total aggregate earnings for the calendar year.</p>
+                        </div>
+                        <hr class="border-gray-200" />
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Gross Annual Salary (Form EA)</label>
+                                <div class="relative rounded-md shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-400 sm:text-sm">RM</span>
+                                    </div>
+                                    <input type="number" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Total Annual Bonus</label>
+                                <div class="relative rounded-md shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-400 sm:text-sm">RM</span>
+                                    </div>
+                                    <input type="number" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                                </div>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Other Taxable Income <span class="text-gray-400 font-normal">(Allowances, Director Fees, Commissions)</span></label>
+                                <div class="relative rounded-md shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-400 sm:text-sm">RM</span>
+                                    </div>
+                                    <input type="number" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: TAX RELIEFS (Hidden by default, toggle via JS class "hidden") -->
+                    <div id="step2" class="p-6 space-y-6 hidden">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900">Step 2: Personal Deductions & Reliefs</h2>
+                            <p class="text-sm text-gray-500 mt-1">Claim tax reliefs to reduce your chargeable net income framework.</p>
+                        </div>
+                        <hr class="border-gray-200" />
+
+                        <!-- Accordion Group 1: Core Personal & Family -->
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-200">
+                                <span class="font-semibold text-gray-700 text-sm"><i class="fa-solid fa-user-group text-blue-500 mr-2"></i> Personal & Family Basics</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded-full">Automated Enforcements</span>
+                            </div>
+                            <div class="p-4 space-y-4 bg-white">
+                                <div class="flex justify-between items-center p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-blue-900">Individual & Dependent Relatives Relief</h4>
+                                        <p class="text-xs text-blue-700">Granted automatically to every individual resident taxpayer.</p>
+                                    </div>
+                                    <span class="font-bold text-blue-900 text-sm">Fixed RM 9,000</span>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <label class="text-sm font-medium text-gray-700">Childcare & Registered Kindergarten Fees <span class="text-xs text-gray-400 font-normal">(Max RM3,000)</span></label>
+                                        <span class="text-xs font-semibold text-gray-500">Cap: RM3,000</span>
+                                    </div>
+                                    <div class="relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="text-gray-400 text-sm">RM</span></div>
+                                        <input type="number" max="3000" placeholder="0.00" class="w-full pl-12 pr-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:bg-white focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <!-- Real-time progress helper line -->
+                                    <div class="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
+                                        <div class="bg-emerald-500 h-full transition-all duration-300" style="width: 45%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Accordion Group 2: Insurance & Funds -->
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-200">
+                                <span class="font-semibold text-gray-700 text-sm"><i class="fa-solid fa-shield-halved text-blue-500 mr-2"></i> Insurance & Retirement Contributions</span>
+                            </div>
+                            <div class="p-4 space-y-4 bg-white">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">Life Insurance Premiums</label>
+                                        <input type="number" placeholder="Max RM3,000" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">EPF Contributions</label>
+                                        <input type="number" placeholder="Max RM4,000" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Accordion Group 3: Lifestyle & Environment -->
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-200">
+                                <span class="font-semibold text-gray-700 text-sm"><i class="fa-solid fa-laptop text-blue-500 mr-2"></i> Lifestyle & Green Initiatives</span>
+                            </div>
+                            <div class="p-4 space-y-4 bg-white">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">General Lifestyle <span class="text-xs text-gray-400 font-normal">(Books, Tech, Internet, Gym)</span></label>
+                                    <input type="number" placeholder="Max RM2,500" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: REBATES & FINAL CALCULATIONS (Hidden by default) -->
+                    <div id="step3" class="p-6 space-y-6 hidden">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900">Step 3: Tax Rebates & Deductions</h2>
+                            <p class="text-sm text-gray-500 mt-1">Apply direct rebates against your computed tax subtotal baseline.</p>
+                        </div>
+                        <hr class="border-gray-200" />
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Zakat / Fitrah Payments</label>
+                                <div class="relative rounded-md shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="text-gray-400 text-sm">RM</span></div>
+                                    <input type="number" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:bg-white focus:ring-2 focus:ring-blue-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Monthly Tax Deductions (MTD / PCB)</label>
+                                <p class="text-xs text-gray-400 mb-2">Enter the amount already deducted by your employer throughout the year.</p>
+                                <div class="relative rounded-md shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="text-gray-400 text-sm">RM</span></div>
+                                    <input type="number" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:bg-white focus:ring-2 focus:ring-blue-500">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Controller Footer Buttons -->
+                    <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                        <button type="button" id="prevBtn" class="px-5 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-600 bg-white hover:bg-gray-100 focus:outline-none transition-all invisible">
+                            <i class="fa-solid fa-arrow-left mr-2"></i> Back
+                        </button>
+                        <button type="button" id="nextBtn" class="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
+                            Next Step <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Column: Sticky Computational Results Summary Panel -->
+            <div class="lg:col-span-1 sticky top-24">
+                <div class="bg-gray-900 text-white rounded-xl shadow-lg border border-gray-800 overflow-hidden">
+                    <div class="p-6 bg-gray-800/50 border-b border-gray-800">
+                        <h3 class="font-bold text-md text-gray-200 tracking-wide uppercase">Real-Time Computation Summary</h3>
+                    </div>
+                    
+                    <div class="p-6 space-y-4 text-sm">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Total Gross Income:</span>
+                            <span class="font-semibold text-gray-100" id="summaryGross">RM 0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Total Allowed Reliefs:</span>
+                            <span class="font-semibold text-amber-400" id="summaryReliefs">- RM 9,000.00</span>
+                        </div>
+                        <hr class="border-gray-800" />
+                        
+                        <div class="flex justify-between items-center bg-gray-800/40 p-2 rounded-lg">
+                            <span class="text-gray-300 font-medium">Chargeable Income:</span>
+                            <span class="font-bold text-white text-md" id="summaryChargeable">RM 0.00</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center pt-2">
+                            <span class="text-gray-400">Tax Tier Bracket Rate:</span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-900/60 text-blue-300" id="summaryRate">0%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Calculated Base Tax:</span>
+                            <span class="font-semibold text-gray-100" id="summaryBaseTax">RM 0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Rebates (Personal / Zakat):</span>
+                            <span class="font-semibold text-emerald-400" id="summaryRebates">- RM 0.00</span>
+                        </div>
+                        
+                        <div class="pt-4 border-t-2 border-dashed border-gray-800">
+                            <div class="bg-blue-950/40 border border-blue-900 p-4 rounded-xl text-center">
+                                <span class="text-xs uppercase font-bold text-blue-400 tracking-wider block mb-1">Net Tax Payable / Refund</span>
+                                <span class="text-3xl font-extrabold text-blue-400 block" id="summaryFinalTax">RM 0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 bg-gray-950/80 text-center text-xs text-gray-500 border-t border-gray-850">
+                        Values calculated represent guidelines adhering to standard LHDN filing guidelines.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Dummy Javascript Core to Drive State Toggling UI -->
+    <script>
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const progressBarFill = document.getElementById('progressBarFill');
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                document.getElementById(`step${currentStep}`).classList.add('hidden');
+                currentStep++;
+                document.getElementById(`step${currentStep}`).classList.remove('hidden');
+                updateWizardState();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                document.getElementById(`step${currentStep}`).classList.add('hidden');
+                currentStep--;
+                document.getElementById(`step${currentStep}`).classList.remove('hidden');
+                updateWizardState();
+            }
+        });
+
+        function updateWizardState() {
+            // Update control button text and visibility rules
+            if (currentStep === 1) {
+                prevBtn.classList.add('invisible');
+            } else {
+                prevBtn.classList.remove('invisible');
+            }
+
+            if (currentStep === totalSteps) {
+                nextBtn.innerHTML = `Calculate Tax <i class="fa-solid fa-check ml-2"></i>`;
+                nextBtn.classList.replace('bg-blue-600', 'bg-emerald-600');
+                nextBtn.classList.replace('hover:bg-blue-700', 'hover:bg-emerald-700');
+            } else {
+                nextBtn.innerHTML = `Next Step <i class="fa-solid fa-arrow-right ml-2"></i>`;
+                nextBtn.classList.replace('bg-emerald-600', 'bg-blue-600');
+                nextBtn.classList.replace('hover:bg-emerald-700', 'hover:bg-blue-700');
+            }
+
+            // Move the progress tracking bar fill percentage width
+            const fillPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            progressBarFill.style.width = `${fillPercentage}%`;
+        }
+    </script>
+</body>
+</html>
