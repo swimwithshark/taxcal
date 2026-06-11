@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malaysia Personal Tax Calculator (YA 2025/2026)</title>
+    <title>Comprehensive Malaysia Tax Calculator (YA 2025/2026)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Hide number input arrows for cleaner UI */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+    </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans antialiased">
 
@@ -17,14 +23,13 @@
                 </div>
                 <div>
                     <span class="font-bold text-lg block tracking-tight">TaxCalc.my</span>
-                    <span class="text-xs text-gray-500 block -mt-1">Malaysia Personal Tax Engine</span>
+                    <span class="text-xs text-gray-500 block -mt-1">Full LHDN Computation Engine</span>
                 </div>
             </div>
             <div class="flex items-center space-x-4">
-                <label for="assessmentYear" class="text-sm font-medium text-gray-600">Year of Assessment:</label>
                 <select id="assessmentYear" class="bg-gray-100 border border-gray-300 rounded-md py-1 px-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="2026">YA 2026 (Budget 2026)</option>
-                    <option value="2025">YA 2025 (Current Filing)</option>
+                    <option value="2025">YA 2025 (Current)</option>
                 </select>
             </div>
         </div>
@@ -42,15 +47,15 @@
 
                         <div class="z-10 flex flex-col items-center bg-white px-2">
                             <div id="stepCircle1" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold ring-4 ring-blue-100 transition-colors duration-300">1</div>
-                            <span id="stepLabel1" class="text-xs font-semibold mt-2 text-blue-600">Income Details</span>
+                            <span id="stepLabel1" class="text-xs font-semibold mt-2 text-blue-600">Income</span>
                         </div>
                         <div class="z-10 flex flex-col items-center bg-white px-2">
                             <div id="stepCircle2" class="w-10 h-10 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold transition-colors duration-300">2</div>
-                            <span id="stepLabel2" class="text-xs font-medium mt-2 text-gray-500">Tax Reliefs</span>
+                            <span id="stepLabel2" class="text-xs font-medium mt-2 text-gray-500">Full Reliefs</span>
                         </div>
                         <div class="z-10 flex flex-col items-center bg-white px-2">
                             <div id="stepCircle3" class="w-10 h-10 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold transition-colors duration-300">3</div>
-                            <span id="stepLabel3" class="text-xs font-medium mt-2 text-gray-500">Rebates & Final</span>
+                            <span id="stepLabel3" class="text-xs font-medium mt-2 text-gray-500">Rebates</span>
                         </div>
                     </div>
                 </div>
@@ -60,36 +65,29 @@
                     <div id="step1" class="p-6 space-y-6">
                         <div>
                             <h2 class="text-xl font-bold text-gray-900">Step 1: Gross Annual Income</h2>
-                            <p class="text-sm text-gray-500 mt-1">Declare your total aggregate earnings for the calendar year.</p>
+                            <p class="text-sm text-gray-500 mt-1">Declare your total aggregate earnings for the year.</p>
                         </div>
                         <hr class="border-gray-200" />
-                        
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Gross Annual Salary (Form EA)</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Gross Annual Salary</label>
                                 <div class="relative rounded-md shadow-sm">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span class="text-gray-400 sm:text-sm">RM</span>
-                                    </div>
-                                    <input type="number" id="inputSalary" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="text-gray-400 sm:text-sm">RM</span></div>
+                                    <input type="number" id="inputSalary" placeholder="0" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Total Annual Bonus</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Total Bonus</label>
                                 <div class="relative rounded-md shadow-sm">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span class="text-gray-400 sm:text-sm">RM</span>
-                                    </div>
-                                    <input type="number" id="inputBonus" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="text-gray-400 sm:text-sm">RM</span></div>
+                                    <input type="number" id="inputBonus" placeholder="0" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none">
                                 </div>
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Other Taxable Income <span class="text-gray-400 font-normal">(Allowances, Director Fees, Commissions)</span></label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Other Taxable Income (Allowances, Rentals, Dividends)</label>
                                 <div class="relative rounded-md shadow-sm">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span class="text-gray-400 sm:text-sm">RM</span>
-                                    </div>
-                                    <input type="number" id="inputOtherIncome" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="text-gray-400 sm:text-sm">RM</span></div>
+                                    <input type="number" id="inputOtherIncome" placeholder="0" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none">
                                 </div>
                             </div>
                         </div>
@@ -97,123 +95,162 @@
 
                     <div id="step2" class="p-6 space-y-6 hidden">
                         <div>
-                            <h2 class="text-xl font-bold text-gray-900">Step 2: Personal Deductions & Reliefs</h2>
-                            <p class="text-sm text-gray-500 mt-1">Claim tax reliefs to reduce your chargeable net income framework.</p>
+                            <h2 class="text-xl font-bold text-gray-900">Step 2: Comprehensive Deductions</h2>
+                            <p class="text-sm text-gray-500 mt-1">Leave fields blank if they do not apply to you.</p>
                         </div>
-                        <hr class="border-gray-200" />
 
                         <div class="border border-gray-200 rounded-lg overflow-hidden">
-                            <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-200">
-                                <span class="font-semibold text-gray-700 text-sm"><i class="fa-solid fa-user-group text-blue-500 mr-2"></i> Personal & Family Basics</span>
-                                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded-full">Automated Enforcements</span>
-                            </div>
+                            <div class="bg-gray-50 px-4 py-3 border-b border-gray-200"><span class="font-bold text-gray-700 text-sm"><i class="fa-solid fa-users text-blue-500 mr-2"></i> Personal & Family</span></div>
                             <div class="p-4 space-y-4 bg-white">
-                                <div class="flex justify-between items-center p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                    <div>
-                                        <h4 class="text-sm font-semibold text-blue-900">Individual & Dependent Relatives Relief</h4>
-                                        <p class="text-xs text-blue-700">Granted automatically to every individual resident taxpayer.</p>
-                                    </div>
+                                <div class="flex justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <span class="text-sm font-semibold text-blue-900">Automatic Individual Relief</span>
                                     <span class="font-bold text-blue-900 text-sm">Fixed RM 9,000</span>
                                 </div>
-                                <div>
-                                    <div class="flex justify-between items-center mb-1">
-                                        <label for="inputChildcare" class="text-sm font-medium text-gray-700">Childcare & Registered Kindergarten Fees</label>
-                                        <span id="childcareCapLabel" class="text-xs font-semibold text-gray-500">Cap: RM 3,000</span>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Spouse Relief / Alimony (Cap: RM4k)</label>
+                                        <input type="number" id="inputSpouse" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
                                     </div>
-                                    <div class="relative rounded-md shadow-sm">
-                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="text-gray-400 text-sm">RM</span></div>
-                                        <input type="number" id="inputChildcare" placeholder="0.00" class="w-full pl-12 pr-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:bg-white focus:ring-1 focus:ring-blue-500">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Disabled Self (Cap: RM7k)</label>
+                                        <input type="number" id="inputDisabledSelf" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Child < 18 Years (Qty x RM2,000)</label>
+                                        <input type="number" id="qtyChildUnder18" placeholder="Number of children" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Child 18+ (Tertiary) (Qty x RM8,000)</label>
+                                        <input type="number" id="qtyChildTertiary" placeholder="Number of children" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Childcare / Daycare Fees (Cap: RM3k)</label>
+                                        <input type="number" id="inputChildcare" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Breastfeeding Equip (Cap: RM1k, bi-yearly)</label>
+                                        <input type="number" id="inputBreastfeeding" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="border border-gray-200 rounded-lg overflow-hidden">
-                            <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-200">
-                                <span class="font-semibold text-gray-700 text-sm"><i class="fa-solid fa-shield-halved text-blue-500 mr-2"></i> Insurance & Retirement Contributions</span>
-                            </div>
+                            <div class="bg-gray-50 px-4 py-3 border-b border-gray-200"><span class="font-bold text-gray-700 text-sm"><i class="fa-solid fa-stethoscope text-blue-500 mr-2"></i> Medical & Self-Education</span></div>
                             <div class="p-4 space-y-4 bg-white">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label for="inputLifeInsurance" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">Life Insurance Premiums (Cap: RM3k)</label>
-                                        <input type="number" id="inputLifeInsurance" placeholder="0.00" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Parents' Medical / Care (Cap: RM8k)</label>
+                                        <input type="number" id="inputParentsMedical" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
                                     </div>
                                     <div>
-                                        <label for="inputEPF" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">EPF Contributions (Cap: RM4k)</label>
-                                        <input type="number" id="inputEPF" placeholder="0.00" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Family Medical / Vaccines (Cap: RM10k)</label>
+                                        <input type="number" id="inputFamilyMedical" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Self-Education Fees (Cap: RM7k)</label>
+                                        <input type="number" id="inputSelfEducation" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="border border-gray-200 rounded-lg overflow-hidden">
-                            <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-200">
-                                <span class="font-semibold text-gray-700 text-sm"><i class="fa-solid fa-laptop text-blue-500 mr-2"></i> Lifestyle & Green Initiatives</span>
-                            </div>
+                            <div class="bg-gray-50 px-4 py-3 border-b border-gray-200"><span class="font-bold text-gray-700 text-sm"><i class="fa-solid fa-piggy-bank text-blue-500 mr-2"></i> Insurance, EPF & Investments</span></div>
                             <div class="p-4 space-y-4 bg-white">
-                                <div>
-                                    <label for="inputLifestyle" class="block text-sm font-medium text-gray-700 mb-1">General Lifestyle <span class="text-xs text-gray-400 font-normal">(Books, Tech, Internet, Gym - Cap: RM2,500)</span></label>
-                                    <input type="number" id="inputLifestyle" placeholder="0.00" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Life Insurance (Cap: RM3k)</label>
+                                        <input type="number" id="inputLifeInsurance" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">EPF Contributions (Cap: RM4k)</label>
+                                        <input type="number" id="inputEPF" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Medical/Education Ins (Cap: RM3k)</label>
+                                        <input type="number" id="inputMedInsurance" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">PRS / Retirement Scheme (Cap: RM3k)</label>
+                                        <input type="number" id="inputPRS" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">SSPN Net Deposits (Cap: RM8k)</label>
+                                        <input type="number" id="inputSSPN" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">SOCSO / EIS (Cap: RM350)</label>
+                                        <input type="number" id="inputSOCSO" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <div class="bg-gray-50 px-4 py-3 border-b border-gray-200"><span class="font-bold text-gray-700 text-sm"><i class="fa-solid fa-leaf text-blue-500 mr-2"></i> Lifestyle & Special</span></div>
+                            <div class="p-4 space-y-4 bg-white">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">General Lifestyle (Cap: RM2.5k)</label>
+                                        <input type="number" id="inputLifestyle" placeholder="Books, internet, tech" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Extra Sports Equipment (Cap: RM1k)</label>
+                                        <input type="number" id="inputSports" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">EV / Green Tech / CCTV (Cap: RM2.5k)</label>
+                                        <input type="number" id="inputGreen" placeholder="RM 0" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">Housing Loan Interest (Cap: RM7k)</label>
+                                        <input type="number" id="inputHousing" placeholder="1st home only" class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div id="step3" class="p-6 space-y-6 hidden">
                         <div>
-                            <h2 class="text-xl font-bold text-gray-900">Step 3: Tax Rebates & Deductions</h2>
-                            <p class="text-sm text-gray-500 mt-1">Apply direct rebates against your computed tax subtotal baseline.</p>
+                            <h2 class="text-xl font-bold text-gray-900">Step 3: Direct Rebates & Pre-payments</h2>
                         </div>
                         <hr class="border-gray-200" />
-
                         <div class="space-y-4">
                             <div>
-                                <label for="inputZakat" class="block text-sm font-medium text-gray-700 mb-1">Zakat / Fitrah Payments</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Zakat / Fitrah Payments</label>
                                 <div class="relative rounded-md shadow-sm">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="text-gray-400 text-sm">RM</span></div>
-                                    <input type="number" id="inputZakat" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:bg-white focus:ring-2 focus:ring-blue-500">
+                                    <input type="number" id="inputZakat" placeholder="0" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:bg-white focus:ring-2 focus:ring-blue-500">
                                 </div>
                             </div>
                             <div>
-                                <label for="inputMTD" class="block text-sm font-medium text-gray-700 mb-1">Monthly Tax Deductions (MTD / PCB)</label>
-                                <p class="text-xs text-gray-400 mb-2">Enter the amount already deducted by your employer throughout the year.</p>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Monthly Tax Deductions (MTD / PCB)</label>
                                 <div class="relative rounded-md shadow-sm">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="text-gray-400 text-sm">RM</span></div>
-                                    <input type="number" id="inputMTD" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:bg-white focus:ring-2 focus:ring-blue-500">
+                                    <input type="number" id="inputMTD" placeholder="0" class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:bg-white focus:ring-2 focus:ring-blue-500">
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-                        <button type="button" id="prevBtn" onclick="handlePrevStep()" class="px-5 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-600 bg-white hover:bg-gray-100 focus:outline-none transition-all invisible">
-                            <i class="fa-solid fa-arrow-left mr-2"></i> Back
-                        </button>
-                        <button type="button" id="nextBtn" onclick="handleNextStep()" class="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
-                            Next Step <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </button>
+                        <button type="button" id="prevBtn" onclick="handlePrevStep()" class="px-5 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-600 bg-white hover:bg-gray-100 transition-all invisible"><i class="fa-solid fa-arrow-left mr-2"></i> Back</button>
+                        <button type="button" id="nextBtn" onclick="handleNextStep()" class="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-all">Next Step <i class="fa-solid fa-arrow-right ml-2"></i></button>
                     </div>
                 </form>
-
+                
                 <div id="finalReportCard" class="hidden bg-emerald-50 border border-emerald-200 p-6 rounded-xl shadow-inner space-y-4">
                     <div class="flex items-center space-x-3 text-emerald-900">
                         <i class="fa-solid fa-circle-check text-2xl"></i>
                         <h3 class="text-lg font-bold">Calculation Strategy Locked</h3>
                     </div>
-                    <p class="text-sm text-emerald-800">Your LHDN personal tax assessment profile has been calculated successfully. Please check the summary engine details on your screen.</p>
                     <div class="bg-white p-4 rounded-lg border border-emerald-100 divide-y divide-gray-100 text-sm">
-                        <div class="py-2 flex justify-between">
-                            <span class="text-gray-500">Taxable Net Chargeable Income:</span>
-                            <span id="reportChargeable" class="font-bold text-gray-900">RM 0.00</span>
-                        </div>
-                        <div class="py-2 flex justify-between">
-                            <span class="text-gray-500">Effective Tax Bracket Tier:</span>
-                            <span id="reportRate" class="font-bold text-blue-600">0%</span>
-                        </div>
-                        <div class="py-2 flex justify-between">
-                            <span class="text-gray-700 font-semibold">Final Settlement Position:</span>
-                            <span id="reportFinal" class="font-black text-emerald-600 text-base">RM 0.00</span>
-                        </div>
+                        <div class="py-2 flex justify-between"><span class="text-gray-500">Chargeable Income:</span><span id="reportChargeable" class="font-bold text-gray-900">RM 0.00</span></div>
+                        <div class="py-2 flex justify-between"><span class="text-gray-500">Bracket Rate:</span><span id="reportRate" class="font-bold text-blue-600">0%</span></div>
+                        <div class="py-2 flex justify-between"><span class="text-gray-700 font-semibold">Final Settlement:</span><span id="reportFinal" class="font-black text-emerald-600 text-base">RM 0.00</span></div>
                     </div>
                 </div>
 
@@ -221,49 +258,22 @@
 
             <div class="lg:col-span-1 sticky top-24">
                 <div class="bg-gray-900 text-white rounded-xl shadow-lg border border-gray-800 overflow-hidden">
-                    <div class="p-6 bg-gray-800/50 border-b border-gray-800">
-                        <h3 class="font-bold text-md text-gray-200 tracking-wide uppercase">Real-Time Computation Summary</h3>
-                    </div>
-                    
+                    <div class="p-5 bg-gray-800/50 border-b border-gray-800"><h3 class="font-bold text-md text-gray-200 uppercase tracking-wide">Live Summary</h3></div>
                     <div class="p-6 space-y-4 text-sm">
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400">Total Gross Income:</span>
-                            <span class="font-semibold text-gray-100" id="summaryGross">RM 0.00</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400">Total Allowed Reliefs:</span>
-                            <span class="font-semibold text-amber-400" id="summaryReliefs">- RM 9,000.00</span>
-                        </div>
+                        <div class="flex justify-between items-center"><span class="text-gray-400">Total Gross Income:</span><span class="font-semibold text-gray-100" id="summaryGross">RM 0.00</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-400">Total Deductions:</span><span class="font-semibold text-amber-400" id="summaryReliefs">- RM 9,000.00</span></div>
                         <hr class="border-gray-800" />
-                        
-                        <div class="flex justify-between items-center bg-gray-800/40 p-2 rounded-lg">
-                            <span class="text-gray-300 font-medium">Chargeable Income:</span>
-                            <span class="font-bold text-white text-md" id="summaryChargeable">RM 0.00</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center pt-2">
-                            <span class="text-gray-400">Tax Tier Bracket Rate:</span>
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-900/60 text-blue-300" id="summaryRate">0%</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400">Calculated Base Tax:</span>
-                            <span class="font-semibold text-gray-100" id="summaryBaseTax">RM 0.00</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400">Rebates (Personal / Zakat):</span>
-                            <span class="font-semibold text-emerald-400" id="summaryRebates">- RM 0.00</span>
-                        </div>
+                        <div class="flex justify-between items-center bg-gray-800/40 p-2 rounded-lg"><span class="text-gray-300 font-medium">Chargeable Income:</span><span class="font-bold text-white text-md" id="summaryChargeable">RM 0.00</span></div>
+                        <div class="flex justify-between items-center pt-2"><span class="text-gray-400">Tax Tier Bracket:</span><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-900/60 text-blue-300" id="summaryRate">0%</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-400">Base Tax:</span><span class="font-semibold text-gray-100" id="summaryBaseTax">RM 0.00</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-400">Rebates (Zakat/Rebate):</span><span class="font-semibold text-emerald-400" id="summaryRebates">- RM 0.00</span></div>
                         
                         <div class="pt-4 border-t-2 border-dashed border-gray-800">
                             <div class="bg-blue-950/40 border border-blue-900 p-4 rounded-xl text-center">
-                                <span class="text-xs uppercase font-bold text-blue-400 tracking-wider block mb-1">Net Tax Payable / Refund</span>
+                                <span class="text-xs uppercase font-bold text-blue-400 tracking-wider block mb-1">Net Payable / Refund</span>
                                 <span class="text-3xl font-extrabold text-blue-400 block" id="summaryFinalTax">RM 0.00</span>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="p-4 bg-gray-950/80 text-center text-xs text-gray-500 border-t border-gray-850">
-                        Values calculated represent guidelines adhering to standard LHDN filing guidelines.
                     </div>
                 </div>
             </div>
@@ -275,27 +285,17 @@
         let currentStep = 1;
         const totalSteps = 3;
 
-        // Form elements mapping
+        // UI Variables
         const form = document.getElementById('taxWizardForm');
-        const assessmentYearSelect = document.getElementById('assessmentYear');
         const nextBtn = document.getElementById('nextBtn');
         const prevBtn = document.getElementById('prevBtn');
         const progressBarFill = document.getElementById('progressBarFill');
 
-        // Target Specific Inputs cleanly by direct reference ID definitions
-        const salaryIn = document.getElementById('inputSalary');
-        const bonusIn = document.getElementById('inputBonus');
-        const otherIn = document.getElementById('inputOtherIncome');
-        const childcareIn = document.getElementById('inputChildcare');
-        const lifeInsIn = document.getElementById('inputLifeInsurance');
-        const epfIn = document.getElementById('inputEPF');
-        const lifestyleIn = document.getElementById('inputLifestyle');
-        const zakatIn = document.getElementById('inputZakat');
-        const mtdIn = document.getElementById('inputMTD');
+        // Target ALL Inputs
+        const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
 
-        // Automatically calculate positions instantly as values change
         form.addEventListener('input', runTaxCalculationPipeline);
-        assessmentYearSelect.addEventListener('change', runTaxCalculationPipeline);
+        document.getElementById('assessmentYear').addEventListener('change', runTaxCalculationPipeline);
 
         function handleNextStep() {
             if (currentStep < totalSteps) {
@@ -305,10 +305,8 @@
                 updateWizardState();
                 runTaxCalculationPipeline();
             } else {
-                // If clicked on step 3 ("Calculate Tax")
                 runTaxCalculationPipeline();
                 document.getElementById('finalReportCard').classList.remove('hidden');
-                // Smooth focus view scroll down to report block targets
                 document.getElementById('finalReportCard').scrollIntoView({ behavior: 'smooth' });
             }
         }
@@ -324,13 +322,7 @@
         }
 
         function updateWizardState() {
-            if (currentStep === 1) {
-                prevBtn.classList.add('invisible');
-            } else {
-                prevBtn.classList.remove('invisible');
-            }
-
-            // Sync visual navigation header bars
+            prevBtn.classList.toggle('invisible', currentStep === 1);
             for (let i = 1; i <= totalSteps; i++) {
                 const circle = document.getElementById(`stepCircle${i}`);
                 const label = document.getElementById(`stepLabel${i}`);
@@ -345,42 +337,58 @@
                     label.className = "text-xs font-medium mt-2 text-gray-500";
                 }
             }
-
             if (currentStep === totalSteps) {
                 nextBtn.innerHTML = `Calculate Tax <i class="fa-solid fa-check ml-2"></i>`;
-                nextBtn.className = "px-6 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all";
+                nextBtn.className = "px-6 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 shadow-sm transition-all";
             } else {
                 nextBtn.innerHTML = `Next Step <i class="fa-solid fa-arrow-right ml-2"></i>`;
-                nextBtn.className = "px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all";
+                nextBtn.className = "px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 shadow-sm transition-all";
             }
-
-            const fillPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            progressBarFill.style.width = `${fillPercentage}%`;
+            progressBarFill.style.width = `${((currentStep - 1) / (totalSteps - 1)) * 100}%`;
         }
 
         function runTaxCalculationPipeline() {
-            // A. Income Calculations
-            const salary = parseFloat(salaryIn.value) || 0;
-            const bonus = parseFloat(bonusIn.value) || 0;
-            const otherIncome = parseFloat(otherIn.value) || 0;
-            const grossIncome = salary + bonus + otherIncome;
+            // A. Income
+            const grossIncome = getVal('inputSalary') + getVal('inputBonus') + getVal('inputOtherIncome');
 
-            // B. Relief Configuration Processing
-            const baseIndividualRelief = 9000;
-            const childcareCap = 3000;
-            const lifeInsuranceCap = 3000;
-            const epfCap = 4000;
-            const lifestyleCap = 2500;
+            // B. Apply Caps to 20+ Reliefs
+            const baseRelief = 9000;
+            const r_spouse = Math.min(getVal('inputSpouse'), 4000);
+            const r_disSelf = Math.min(getVal('inputDisabledSelf'), 7000);
+            
+            // Multiply child quantity by specific allowance
+            const r_childUnder18 = getVal('qtyChildUnder18') * 2000;
+            const r_childTertiary = getVal('qtyChildTertiary') * 8000;
+            
+            const r_childcare = Math.min(getVal('inputChildcare'), 3000);
+            const r_breastfeed = Math.min(getVal('inputBreastfeeding'), 1000);
+            
+            const r_parentMed = Math.min(getVal('inputParentsMedical'), 8000);
+            const r_famMed = Math.min(getVal('inputFamilyMedical'), 10000);
+            const r_selfEdu = Math.min(getVal('inputSelfEducation'), 7000);
+            
+            const r_lifeIns = Math.min(getVal('inputLifeInsurance'), 3000);
+            const r_epf = Math.min(getVal('inputEPF'), 4000);
+            const r_medIns = Math.min(getVal('inputMedInsurance'), 3000);
+            const r_prs = Math.min(getVal('inputPRS'), 3000);
+            const r_sspn = Math.min(getVal('inputSSPN'), 8000);
+            const r_socso = Math.min(getVal('inputSOCSO'), 350);
+            
+            const r_lifestyle = Math.min(getVal('inputLifestyle'), 2500);
+            const r_sports = Math.min(getVal('inputSports'), 1000);
+            const r_green = Math.min(getVal('inputGreen'), 2500);
+            const r_housing = Math.min(getVal('inputHousing'), 7000);
 
-            const allowedChildcare = Math.min(parseFloat(childcareIn.value) || 0, childcareCap);
-            const allowedLifeIns = Math.min(parseFloat(lifeInsIn.value) || 0, lifeInsuranceCap);
-            const allowedEpf = Math.min(parseFloat(epfIn.value) || 0, epfCap);
-            const allowedLifestyle = Math.min(parseFloat(lifestyleIn.value) || 0, lifestyleCap);
+            // Sum all valid reliefs
+            const totalReliefs = baseRelief + r_spouse + r_disSelf + r_childUnder18 + r_childTertiary + 
+                                 r_childcare + r_breastfeed + r_parentMed + r_famMed + r_selfEdu + 
+                                 r_lifeIns + r_epf + r_medIns + r_prs + r_sspn + r_socso + 
+                                 r_lifestyle + r_sports + r_green + r_housing;
 
-            const totalReliefs = baseIndividualRelief + allowedChildcare + allowedLifeIns + allowedEpf + allowedLifestyle;
+            // C. Chargeable Income
             const chargeableIncome = Math.max(0, grossIncome - totalReliefs);
 
-            // C. LHDN Slab Engine Brackets
+            // D. Tax Brackets (YA 2025/2026)
             const brackets = [
                 { min: 0, max: 5000, base: 0, rate: 0.00 },
                 { min: 5000, max: 20000, base: 0, rate: 0.01 },
@@ -395,54 +403,46 @@
             ];
 
             let activeBracket = brackets.find(b => chargeableIncome > b.min && chargeableIncome <= b.max);
-            let baseTax = 0;
-            let rateLabel = "0%";
+            let baseTax = 0; let rateLabel = "0%";
 
             if (activeBracket) {
-                const taxableExcess = chargeableIncome - activeBracket.min;
-                baseTax = activeBracket.base + (taxableExcess * activeBracket.rate);
+                baseTax = activeBracket.base + ((chargeableIncome - activeBracket.min) * activeBracket.rate);
                 rateLabel = `${(activeBracket.rate * 100)}%`;
             }
 
-            // D. Rebate System Processing
-            const zakatPaid = parseFloat(zakatIn.value) || 0;
-            const mtdPaid = parseFloat(mtdIn.value) || 0;
-            const personalRebate = (chargeableIncome <= 35000 && chargeableIncome > 0) ? 400 : 0;
-            const totalRebates = personalRebate + zakatPaid;
+            // E. Rebates
+            const totalRebates = ((chargeableIncome <= 35000 && chargeableIncome > 0) ? 400 : 0) + getVal('inputZakat');
+            let finalNetOutcome = Math.max(0, baseTax - totalRebates) - getVal('inputMTD');
 
-            let netTaxPayable = Math.max(0, baseTax - totalRebates);
-            let finalNetOutcome = netTaxPayable - mtdPaid;
-
-            // E. UI Render Tasks (Sidebar Layout targets)
-            document.getElementById('summaryGross').innerText = `RM ${grossIncome.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
-            document.getElementById('summaryReliefs').innerText = `- RM ${totalReliefs.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
-            document.getElementById('summaryChargeable').innerText = `RM ${chargeableIncome.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
-            document.getElementById('summaryRate').innerText = rateLabel;
-            document.getElementById('summaryBaseTax').innerText = `RM ${baseTax.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
-            document.getElementById('summaryRebates').innerText = `- RM ${totalRebates.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            // F. UI Formatting
+            const fmt = (num) => num.toLocaleString('en-MY', {minimumFractionDigits: 2});
             
-            const outcomeElement = document.getElementById('summaryFinalTax');
-            let textualFinalString = "";
+            document.getElementById('summaryGross').innerText = `RM ${fmt(grossIncome)}`;
+            document.getElementById('summaryReliefs').innerText = `- RM ${fmt(totalReliefs)}`;
+            document.getElementById('summaryChargeable').innerText = `RM ${fmt(chargeableIncome)}`;
+            document.getElementById('summaryRate').innerText = rateLabel;
+            document.getElementById('summaryBaseTax').innerText = `RM ${fmt(baseTax)}`;
+            document.getElementById('summaryRebates').innerText = `- RM ${fmt(totalRebates)}`;
+            
+            const outEl = document.getElementById('summaryFinalTax');
+            const repOut = document.getElementById('reportFinal');
             
             if (finalNetOutcome < 0) {
-                textualFinalString = `Refund: RM ${Math.abs(finalNetOutcome).toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
-                outcomeElement.innerText = textualFinalString;
-                outcomeElement.className = "text-3xl font-extrabold text-emerald-400 block";
-                document.getElementById('reportFinal').className = "font-black text-emerald-600 text-base";
+                let txt = `Refund: RM ${fmt(Math.abs(finalNetOutcome))}`;
+                outEl.innerText = txt; repOut.innerText = txt;
+                outEl.className = "text-3xl font-extrabold text-emerald-400 block";
+                repOut.className = "font-black text-emerald-600 text-base";
             } else {
-                textualFinalString = `RM ${finalNetOutcome.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
-                outcomeElement.innerText = textualFinalString;
-                outcomeElement.className = "text-3xl font-extrabold text-blue-400 block";
-                document.getElementById('reportFinal').className = "font-black text-blue-600 text-base";
+                let txt = `RM ${fmt(finalNetOutcome)}`;
+                outEl.innerText = txt; repOut.innerText = txt;
+                outEl.className = "text-3xl font-extrabold text-blue-400 block";
+                repOut.className = "font-black text-blue-600 text-base";
             }
 
-            // F. UI Render Tasks (Detailed Bottom Report Card components)
-            document.getElementById('reportChargeable').innerText = `RM ${chargeableIncome.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('reportChargeable').innerText = `RM ${fmt(chargeableIncome)}`;
             document.getElementById('reportRate').innerText = rateLabel;
-            document.getElementById('reportFinal').innerText = textualFinalString;
         }
 
-        // Trigger baseline engine processing loops immediately on system initiation
         runTaxCalculationPipeline();
     </script>
 </body>
